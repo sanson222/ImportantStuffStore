@@ -1,0 +1,22 @@
+.s-card {
+  //flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  flex: auto;
+  width: 150px;
+  // max-height: 400px;
+  margin: .5vw;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .s-content-card {
+    padding: 10px;
+    position: absolute;
+  }
+}

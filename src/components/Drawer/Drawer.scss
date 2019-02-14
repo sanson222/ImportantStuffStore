@@ -1,0 +1,51 @@
+@import "../../css/vars";
+@import "../../css/mixin";
+
+.s-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  .s-nav {
+    flex-shrink: 0;
+    height: 76px;
+    width: 100vw;
+    background-color: $main-color;
+
+    .s-logo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 76px;
+      @include compatibility(user-select, none);
+      z-index: 2;
+    }
+
+  }
+}
+
+.s-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: $main-color;
+  width: 100vw;
+  height: 100vh;
+  transition: all ease-in 200ms;
+  overflow: hidden;
+  // padding: 0 50px 0 50px;
+
+
+
+  .s-content-title {
+    margin: 100px 10px 0 10px;
+  }
+
+  .s-content {
+    margin: 0 10px 0 10px;
+  }
+}
+
+.s-drawer-hidden {
+  right: 100%;
+}
