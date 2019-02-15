@@ -26,13 +26,13 @@ export default class Drawer extends Component <any, any> {
             <>
                 <div className="s-page">
                     <div className="s-nav">
-                        <input
+                        <img
                             className="s-logo"
-                            type="image"
                             src={logo}
                             alt="company logo"
                             onClick={this.toggleDrawer}/>
                     </div>
+                    {/* TODO: deshabilitar scroll cuando se abre el drawer */}
                     <Content allData={this.state.allData}/>
                 </div>
                 <div className={"s-drawer z-depth-1 " + (this.state.drawer ? "" : "s-drawer-hidden")}>
@@ -41,7 +41,7 @@ export default class Drawer extends Component <any, any> {
                         Articulos interesantes
                     </div>
                     <div className="s-content">
-                        <form action="">
+
                             <div className="form-group">
                                 <input
                                     type="text"
@@ -62,10 +62,8 @@ export default class Drawer extends Component <any, any> {
                                 >
                                     Add
                                 </button>
-                                <button className="btn btn-danger">Delete</button>
-                                <button className="btn btn-secondary">Edit</button>
                             </div>
-                        </form>
+
                     </div>
                 </div>
 
@@ -80,7 +78,7 @@ export default class Drawer extends Component <any, any> {
     }
 
 
-    public toggleForm(e: React.MouseEvent) {
+    public toggleForm() {
         this.setState({
             modalForm: !this.state.modalForm,
         })
@@ -99,8 +97,7 @@ export default class Drawer extends Component <any, any> {
         })
     }
 
-    private toggleDrawer(e: React.MouseEvent) {
-        e.preventDefault();
+    private toggleDrawer() {
         this.setState({
             drawer: !this.state.drawer,
         });

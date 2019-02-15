@@ -1,22 +1,29 @@
 .s-card {
-  //flex-grow: 1;
   overflow: hidden;
   display: flex;
   flex: auto;
   width: 150px;
-  // max-height: 400px;
   margin: .5vw;
   justify-content: center;
   align-items: center;
   position: relative;
 
-  img {
+  .s-thumbail {
+    display: inline-block;
+    opacity: 0.5;
     width: 100%;
-    height: auto;
+    padding-top: 75%;
+    background-size: 100% 100%;
+    transition: opacity 100ms ease-in;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   .s-content-card {
     padding: 10px;
     position: absolute;
+    pointer-events: none;
   }
 }

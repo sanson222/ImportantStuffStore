@@ -15,10 +15,15 @@ export default class Card extends Component <any, any> {
     public render(): React.ReactNode {
         return (
             <>
-                <div className="s-card" >
-                    <img src={"https://via.placeholder.com/" + this.state.img} alt="imagen"/>
+                <div
+                    className="s-card"
+                >
+                    <div
+                        className="s-thumbail"
+                        style={{backgroundImage: "url(" + this.props.data.imageUrl + ")"}}
+                    />
                     <div className="s-content-card">
-                        Pocas palabras para un titulo muy largo :'v
+                        {this.props.data.desc}
                     </div>
                 </div>
             </>

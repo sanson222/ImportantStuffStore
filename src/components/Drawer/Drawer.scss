@@ -11,14 +11,16 @@
     height: 76px;
     width: 100vw;
     background-color: $main-color;
+    position: fixed;
+    z-index: 2;
 
     .s-logo {
-      position: fixed;
+      /*position: fixed;
       top: 0;
-      left: 0;
+      left: 0;*/
       width: 76px;
       @include compatibility(user-select, none);
-      z-index: 2;
+
     }
 
   }
