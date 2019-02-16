@@ -3,7 +3,7 @@ import './Drawer.scss';
 import logo from './logo.svg';
 import Content from "./Content/Content";
 import ModalForm from "./ModalForm/ModalForm";
-import VirtualDataProvider from "../../dataProvider/virtualDataProvider";
+import VirtualDataProvider, {EntityData} from "../../dataProvider/virtualDataProvider";
 
 export default class Drawer extends Component <any, any> {
     public constructor(props: any) {
@@ -11,14 +11,13 @@ export default class Drawer extends Component <any, any> {
 
         this.state = {
             drawer: false,
-            modalForm: false,
             allData: VirtualDataProvider.getAll(),
         };
 
         this.toggleDrawer = this.toggleDrawer.bind(this);
-        this.toggleForm = this.toggleForm.bind(this);
-        this.showForm = this.showForm.bind(this);
-        this.updateData = this.updateData.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.hideDrawer = this.hideDrawer.bind(this);
+        this.showModal = this.showModal.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -26,6 +25,7 @@ export default class Drawer extends Component <any, any> {
             <>
                 <div className="s-page">
                     <div className="s-nav">
+
                         <img
                             className="s-logo"
                             src={logo}
@@ -35,66 +35,40 @@ export default class Drawer extends Component <any, any> {
                     {/* TODO: deshabilitar scroll cuando se abre el drawer */}
                     <Content allData={this.state.allData}/>
                 </div>
-                <div className={"s-drawer z-depth-1 " + (this.state.drawer ? "" : "s-drawer-hidden")}>
+                <div className={"s-drawer " + (this.state.drawer ? "" : "s-drawer-hidden")}>
 
                     <div className="s-content-title">
                         Articulos interesantes
                     </div>
+                    <ModalForm
+                        handleSubmit={this.handleSubmit}
+                        _id={"modalForm"}
+                        onClick={this.showModal}
+                        buttonText={"Add"}
+                    />
                     <div className="s-content">
 
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    placeholder="text to find"
-                                    className="form-control"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <select>
-                                    <option>Red</option>
-                                    <option value="">Blue</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={this.showForm}
-                                >
-                                    Add
-                                </button>
-                            </div>
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                placeholder="text to find"
+                                className="form-control"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <select className="form-control">
+                                <option>Red</option>
+                                <option value="">Blue</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+
+                        </div>
 
                     </div>
                 </div>
-
-
-                <ModalForm
-                    modalForm={this.state.modalForm}
-                    toggleForm={this.toggleForm}
-                    callUpdate={this.updateData}
-                />
             </>
         );
-    }
-
-
-    public toggleForm() {
-        this.setState({
-            modalForm: !this.state.modalForm,
-        })
-    }
-
-    public updateData() {
-        this.setState({
-            allData: VirtualDataProvider.getAll(),
-        })
-    }
-
-    private showForm() {
-        this.setState({
-            modalForm: true,
-            drawer: false,
-        })
     }
 
     private toggleDrawer() {
@@ -103,5 +77,23 @@ export default class Drawer extends Component <any, any> {
         });
     }
 
+    private hideDrawer() {
+        this.setState({
+            drawer: false,
+        });
+    }
 
+    // Modal Methods
+    public handleSubmit(dataToSubmit: EntityData, emptyForm: Function) {
+        VirtualDataProvider.setData(dataToSubmit);
+        let allData = VirtualDataProvider.getAll()
+        this.setState({
+            allData,
+        });
+        emptyForm();
+    }
+
+    public showModal() {
+        this.hideDrawer();
+    }
 }

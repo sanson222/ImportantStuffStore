@@ -2,7 +2,7 @@
   overflow: hidden;
   display: flex;
   flex: auto;
-  width: 150px;
+  width: 360px;
   margin: .5vw;
   justify-content: center;
   align-items: center;
@@ -10,14 +10,14 @@
 
   .s-thumbail {
     display: inline-block;
-    opacity: 0.5;
+    opacity: 0.4;
     width: 100%;
     padding-top: 75%;
     background-size: 100% 100%;
     transition: opacity 100ms ease-in;
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.6;
     }
   }
 
@@ -25,5 +25,10 @@
     padding: 10px;
     position: absolute;
     pointer-events: none;
+    font-size: 22px;
+    font-weight: bold;
+    color: black;
+    word-break: break-word;
+    word-spacing: 1px;
   }
 }

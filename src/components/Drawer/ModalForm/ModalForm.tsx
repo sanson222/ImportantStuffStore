@@ -1,35 +1,49 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
 import 'bootstrap';
-import virtualDataProvider, {EntityData} from "../../../dataProvider/virtualDataProvider";
+import VirtualDataProvider, {EntityData} from "../../../dataProvider/virtualDataProvider";
 
 export default class ModalForm extends Component<any, any> {
 
     public constructor(props: any) {
         super(props);
 
-        this.state = {};
+        this.state = (this.props.initialData) ?
+            this.props.initialData
+            :
+            new EntityData().toPlainObject();
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleTextArea = this.handleTextArea.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.showForm = this.showForm.bind(this);
+        this.fillFormWithData = this.fillFormWithData.bind(this);
+        this.emptyForm = this.emptyForm.bind(this);
+        this.updateDataForm = this.updateDataForm.bind(this);
     }
 
-    public componentDidUpdate(prevProps: Readonly<any>): void {
-        if (prevProps.modalForm !== this.props.modalForm) {
-            $('#modalForm').modal('toggle');
-        }
+    public componentDidMount(): void {
+        $('#' + this.props._id).appendTo("body");
+    }
+
+    public componentWillUnmount(): void {
+        $('#' + this.props._id).remove();
     }
 
     public render(): React.ReactNode {
         return (
             <>
-                <div className="modal fade" id="modalForm" tabIndex={-1} role="dialog"
-                     aria-labelledby="modalFormLabel" aria-hidden="true">
+                <button
+                    className={this.props.classList || "btn btn-primary"}
+                    onClick={this.showForm}
+                >
+                    {this.props.buttonText}
+                </button>
+
+                <div className="modal" id={this.props._id} tabIndex={-1} role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="modalFormLabel">Subir Informacion</h5>
+                                <h5 className="modal-title">Subir Informacion</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -39,15 +53,18 @@ export default class ModalForm extends Component<any, any> {
                                     <div className="form-group">
                                         <input
                                             className="form-control"
-                                            name="url" type="text"
+                                            name="url"
+                                            type="text"
                                             placeholder="URL"
                                             onChange={this.handleChange}
+                                            value={this.state.url}
                                         />
                                         <input
                                             className="form-control"
                                             name="imageUrl"
                                             type="text"
                                             placeholder="Image url"
+                                            value={this.state.imageUrl}
                                             onChange={this.handleChange}
                                         />
                                         <input
@@ -56,6 +73,7 @@ export default class ModalForm extends Component<any, any> {
                                             type="text"
                                             placeholder="Small description"
                                             maxLength={44}
+                                            value={this.state.desc}
                                             onChange={this.handleChange}
                                         />
                                     </div>
@@ -65,24 +83,31 @@ export default class ModalForm extends Component<any, any> {
                                             className="form-control"
                                             type="text"
                                             placeholder="title"
+                                            value={this.state.title}
                                             onChange={this.handleChange}
                                         />
                                         <textarea
                                             style={{width: "100%"}}
                                             name="content"
-                                            onChange={this.handleTextArea}
+                                            value={this.state.content}
+                                            onChange={this.handleChange}
                                         />
                                         <input
                                             className="form-control"
                                             name="demoImage"
                                             type="text"
                                             placeholder="post image URL"
+                                            value={this.state.demoImage}
                                             onChange={this.handleChange}
                                         />
                                     </div>
                                 </form>
                             </div>
                             <div className="modal-footer">
+                                <button
+                                    onClick={this.fillFormWithData}
+                                    className={"btn btn-primary"}
+                                >Fill</button>
                                 <button
                                     type="button"
                                     className="btn btn-secondary"
@@ -105,14 +130,18 @@ export default class ModalForm extends Component<any, any> {
         );
     }
 
-    private handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        let {name, value} = e.target;
-        this.setState({
-            [name]: value
-        })
+    private showForm() {
+        $('#' + this.props._id).modal('show');
+        {
+            this.props.onClick ? this.props.onClick() : null
+        }
     }
 
-    private handleTextArea(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    private hideForm() {
+        $('#' + this.props._id).modal('hide');
+    }
+
+    private handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         let {name, value} = e.target;
         this.setState({
             [name]: value
@@ -121,21 +150,26 @@ export default class ModalForm extends Component<any, any> {
 
     private handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        let dataToSubmit:  EntityData = {
-            _id: 0,
-            url: this.state.url,
-            imageUrl: this.state.imageUrl,
-            desc: this.state.desc,
-            info: {
-                title: this.state.title,
-                content: this.state.content,
-                demoImage: this.state.demoImage,
-                dataset: [0,0,0],
-            },
-        };
-        virtualDataProvider.setData(dataToSubmit);
-        this.props.toggleForm();
-        this.setState({});
-        this.props.callUpdate();
+        let dataToSubmit = new EntityData(this.state);
+        this.hideForm();
+        {
+            this.props.handleSubmit ?
+                this.props.handleSubmit(dataToSubmit, this.emptyForm, this.updateDataForm)
+                : false
+        }
+    }
+
+    private emptyForm() {
+        this.setState(new EntityData().toPlainObject());
+    }
+
+    private updateDataForm(data: EntityData) {
+        this.setState(data.toPlainObject());
+    }
+
+    private fillFormWithData() {
+        let data = VirtualDataProvider.generateSampleData();
+        this.setState(data.toPlainObject());
+
     }
 }

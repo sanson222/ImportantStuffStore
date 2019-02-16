@@ -10,7 +10,7 @@ export default class CardList extends Component<any, any> {
             <>
                 <div className="s-flex-body">
                     {this.props.allData.map((d: EntityData) => {
-                        return (<Card key={d._id} data={d} />);
+                        return (<Card key={d._id} data={d} history={this.props.history}/>);
                     })}
                 </div>
             </>

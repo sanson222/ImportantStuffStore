@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 import './Card.scss';
 
 export default class Card extends Component <any, any> {
@@ -15,7 +16,8 @@ export default class Card extends Component <any, any> {
     public render(): React.ReactNode {
         return (
             <>
-                <div
+                <Link
+                    to={"/post/"+this.props.data._id}
                     className="s-card"
                 >
                     <div
@@ -25,7 +27,7 @@ export default class Card extends Component <any, any> {
                     <div className="s-content-card">
                         {this.props.data.desc}
                     </div>
-                </div>
+                </Link>
             </>
         );
     }
