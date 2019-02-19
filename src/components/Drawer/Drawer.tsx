@@ -84,9 +84,10 @@ export default class Drawer extends Component <any, any> {
     // Modal Methods
     public handleSubmit(dataToSubmit: EntityData, emptyForm: Function) {
         VirtualDataProvider.setData(dataToSubmit);
-        let allData = VirtualDataProvider.getAll()
+        let allData = VirtualDataProvider.getAll();
         this.setState({
             allData,
+            currentData: allData,
         });
         emptyForm();
     }
