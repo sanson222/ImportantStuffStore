@@ -6,17 +6,9 @@ import {Route, Switch} from "react-router";
 
 export default class Content extends Component<any, any> {
 
-    public constructor(props: any) {
-        super(props);
-
-        this.state = {
-            isCardList: false,
-        }
-    }
-
     public render(): React.ReactNode {
         return (
-            <div className="s-container-page">
+            <div className={"s-container-page " + (this.props.drawer ? "" : "s-container-page-all")}>
                 <Switch>
                     <Route path={"/"} exact render={(props) => <CardList {...props} allData={this.props.allData}/>} />
                     <Route path={"/post/:id"} render={(props) => <PostContent {...props}/>}/>

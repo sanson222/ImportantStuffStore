@@ -12,12 +12,14 @@ export default class Drawer extends Component <any, any> {
         this.state = {
             drawer: false,
             allData: VirtualDataProvider.getAll(),
+            currentData: VirtualDataProvider.getAll(),
         };
 
         this.toggleDrawer = this.toggleDrawer.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.hideDrawer = this.hideDrawer.bind(this);
         this.showModal = this.showModal.bind(this);
+        this.findByInput = this.findByInput.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -33,33 +35,29 @@ export default class Drawer extends Component <any, any> {
                             onClick={this.toggleDrawer}/>
                     </div>
                     {/* TODO: deshabilitar scroll cuando se abre el drawer */}
-                    <Content allData={this.state.allData}/>
+                    <Content allData={this.state.currentData} drawer={this.state.drawer}/>
                 </div>
                 <div className={"s-drawer " + (this.state.drawer ? "" : "s-drawer-hidden")}>
 
                     <div className="s-content-title">
                         Articulos interesantes
                     </div>
-                    <ModalForm
-                        handleSubmit={this.handleSubmit}
-                        _id={"modalForm"}
-                        onClick={this.showModal}
-                        buttonText={"Add"}
-                    />
+
                     <div className="s-content">
 
                         <div className="form-group">
+                            <ModalForm
+                                handleSubmit={this.handleSubmit}
+                                _id={"modalForm"}
+                                onClick={this.showModal}
+                                buttonText={"Add"}
+                            />
                             <input
                                 type="text"
                                 placeholder="text to find"
                                 className="form-control"
+                                onChange={this.findByInput}
                             />
-                        </div>
-                        <div className="form-group">
-                            <select className="form-control">
-                                <option>Red</option>
-                                <option value="">Blue</option>
-                            </select>
                         </div>
                         <div className="form-group">
 
@@ -95,5 +93,19 @@ export default class Drawer extends Component <any, any> {
 
     public showModal() {
         this.hideDrawer();
+    }
+
+    private findByInput(e: React.ChangeEvent<HTMLInputElement>) {
+        let input = e.target.value;
+        let currentData = this.state.allData.filter((post: any) => {
+            return (
+                post.content.includes(input) ||
+                post.desc.includes(input) ||
+                post.title.includes(input)
+            )
+        });
+        this.setState({
+           currentData,
+        });
     }
 }

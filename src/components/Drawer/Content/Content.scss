@@ -1,5 +1,16 @@
+@import "../../../css/vars";
+
 .s-container-page {
   overflow-y: auto;
   flex-grow: 1;
   margin-top: 76px;
+  transition: padding-left ease-in 200ms;
+  @media #{$desktop} {
+    padding-left: 300px;
+  }
+
+}
+
+.s-container-page-all {
+  padding-left: 0;
 }
